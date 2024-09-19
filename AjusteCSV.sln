@@ -5,7 +5,9 @@ VisualStudioVersion = 17.11.35303.130
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AjusteCSV", "AjusteCSV\AjusteCSV.csproj", "{2E4461B3-63BE-4FF0-A8E8-34D9E7036DA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AjusteCSV.BL", "AjusteCSV.BL\AjusteCSV.BL.csproj", "{BC38A3C8-DA12-440E-BF80-7E63FD3C0007}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AjusteCSV.BL", "AjusteCSV.BL\AjusteCSV.BL.csproj", "{BC38A3C8-DA12-440E-BF80-7E63FD3C0007}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AjusteCSV.Access", "AjusteCSV.Access\AjusteCSV.Access.csproj", "{CECE6CC8-884B-4EC4-8192-64569FB6CF20}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{BC38A3C8-DA12-440E-BF80-7E63FD3C0007}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC38A3C8-DA12-440E-BF80-7E63FD3C0007}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC38A3C8-DA12-440E-BF80-7E63FD3C0007}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CECE6CC8-884B-4EC4-8192-64569FB6CF20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CECE6CC8-884B-4EC4-8192-64569FB6CF20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CECE6CC8-884B-4EC4-8192-64569FB6CF20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CECE6CC8-884B-4EC4-8192-64569FB6CF20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

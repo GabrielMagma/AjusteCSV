@@ -14,7 +14,12 @@ namespace AjusteCSV.Controllers
         {
             fileServices = _fileServices;
         }
-
+        /// <summary>
+        /// Servicio que toma el nombre de un archivo de datos CSV guardado en una ruta específica del programa, lo convierte al formato de datos requerido
+        /// y lo guarda en Base de datos
+        /// </summary>
+        /// <param name="String"></param>
+        /// <returns></returns>  
         [HttpPost]
         [Route(nameof(FileController.CreateFileCSV))]        
         public async Task<IActionResult> CreateFileCSV([FromBody] string name)
