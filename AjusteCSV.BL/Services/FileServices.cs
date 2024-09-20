@@ -1,6 +1,8 @@
-﻿using AjusteCSV.BL.DTOs;
+﻿using AjusteCSV.BL.Data;
+using AjusteCSV.BL.DTOs;
 using AjusteCSV.BL.Interfaces;
 using AjusteCSV.BL.Responses;
+using AutoMapper;
 using CsvHelper;
 using System.Globalization;
 using System.Text;
@@ -10,16 +12,18 @@ namespace AjusteCSV.BL.Services
     public class FileServices : IFileServices
     {
         private readonly IFileDataAccess fileDataAccess;
-        public FileServices(IFileDataAccess _fileDataAccess)
+        private readonly IMapper mapper;
+        public FileServices(IFileDataAccess _fileDataAccess, IMapper _mapper)
         {
             fileDataAccess = _fileDataAccess;
+            mapper = _mapper;
         }
         public ResponseQuery<string> CreateFileCSV(string name, ResponseQuery<string> response)
         {
             try
             {   
-                
-                List<IdeamDTO> ideamList = new List<IdeamDTO>();
+                                
+                List<Ideam> ideamListData = new List<Ideam>();
                 string[] fileLines = File.ReadAllLines($"./files/{name}.csv");
                 List<Register> valueFinal = new List<Register>();
                 Register register = new Register();
@@ -75,13 +79,14 @@ namespace AjusteCSV.BL.Services
                             ideam.Precipitation = double.Parse(valueLines[18]);
 
                             valueFinal.Add(register);
-                            ideamList.Add(ideam);
+                            var ideamMapped = mapper.Map<Ideam>(ideam);
+                            ideamListData.Add(ideamMapped);
                             
 
                             register = new Register();
                         }
                         csvWriter.WriteRecords(valueFinal);
-                        fileDataAccess.CreateFile(ideamList);
+                        response.SuccessData = fileDataAccess.CreateFile(ideamListData);
                     }
 
                 }

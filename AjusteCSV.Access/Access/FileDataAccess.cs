@@ -1,5 +1,5 @@
 ﻿using AjusteCSV.Access.Data;
-using AjusteCSV.BL.DTOs;
+using AjusteCSV.BL.Data;
 using AjusteCSV.BL.Interfaces;
 using AutoMapper;
 using System.Collections.Generic;
@@ -9,25 +9,17 @@ namespace AjusteCSV.Access.Access
 {
     public class FileDataAccess : IFileDataAccess
     {
-        protected DannteEssaContext context;
-        private readonly IMapper mapper;
+        protected DannteEssaContext context;        
 
-        public FileDataAccess(DannteEssaContext _context, IMapper _mapper)
+        public FileDataAccess(DannteEssaContext _context)
         {
-            context = _context;
-            mapper = _mapper;
+            context = _context;            
         }
 
-        public Boolean CreateFile(List<IdeamDTO> request)
+        public Boolean CreateFile(List<Ideam> request)
         {
-            List<Ideam> ideamTemp = new List<Ideam>();
-            foreach (var item in request)
-            {
-                var ideam = mapper.Map<Ideam>(item);
-                ideamTemp.Add(ideam);
-            }
             
-            context.Ideams.AddRange(ideamTemp);
+            context.Ideams.AddRange(request);
             context.SaveChanges();
             var result = true;
 

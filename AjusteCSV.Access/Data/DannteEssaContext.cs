@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using AjusteCSV.BL.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace AjusteCSV.Access.Data
+namespace AjusteCSV.BL.Data
 {
     public partial class Ideam
     {

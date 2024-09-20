@@ -11,6 +11,8 @@ namespace AjusteCSV.BL.Responses
         [DataMember]
         public bool Success { get; set; }
         [DataMember]
+        public bool SuccessData { get; set; }
+        [DataMember]
         public string Message { get; set; }        
     }
 }

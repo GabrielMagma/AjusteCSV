@@ -1,12 +1,12 @@
 ﻿
-using AjusteCSV.BL.DTOs;
+using AjusteCSV.BL.Data;
 
 namespace AjusteCSV.BL.Interfaces
 {
     public interface IFileDataAccess
     {
 
-        public Boolean CreateFile(List<IdeamDTO> request);
+        public Boolean CreateFile(List<Ideam> request);
 
     }
 }
