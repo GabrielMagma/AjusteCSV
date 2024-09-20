@@ -6,7 +6,6 @@ using AjusteCSV.BL.Services;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.Swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 

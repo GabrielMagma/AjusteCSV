@@ -1,9 +1,6 @@
 ﻿using AjusteCSV.Access.Data;
 using AjusteCSV.BL.Data;
 using AjusteCSV.BL.Interfaces;
-using AutoMapper;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace AjusteCSV.Access.Access
 {

@@ -5,7 +5,6 @@ using AjusteCSV.BL.Responses;
 using AutoMapper;
 using CsvHelper;
 using System.Globalization;
-using System.Runtime.Serialization;
 using System.Text;
 
 namespace AjusteCSV.BL.Services
@@ -31,6 +30,7 @@ namespace AjusteCSV.BL.Services
                 string routeFile = $".\\files\\{name}{DateTime.Now.ToString("yyyy-MM-dd")}.csv";
                 TextWriter newFile = new StreamWriter(routeFile);
                 newFile.Close();
+                
                 using (var writer = new StreamWriter(new FileStream(routeFile, FileMode.Open), Encoding.UTF8))
                 {
                     using (var csvWriter = new CsvWriter(writer, CultureInfo.CurrentCulture))
@@ -70,11 +70,10 @@ namespace AjusteCSV.BL.Services
                             register.Frecuencia = valueLines[15];
                             ideam.Frequency = valueLines[15];
 
-                            var date = valueLines[16].Split(" ");
-                            var dateSplited = date[0].Split('-', '/');
-                            var dateTemp = (dateSplited[2] + "/" + dateSplited[1] + "/" + dateSplited[0]);
-                            register.Fecha = dateTemp;
-                            ideam.Date = DateOnly.Parse(dateTemp);
+                            var date = ParseDate(valueLines[16]);
+                            
+                            register.Fecha = date.ToString();
+                            ideam.Date = date;
 
                             register.Valor = double.Parse(valueLines[17]);
                             ideam.Precipitation = double.Parse(valueLines[18]);
@@ -113,17 +112,23 @@ namespace AjusteCSV.BL.Services
             return response;
         }
 
-        //private DateTime ParseDate(string dateString)
-        //{            
-        //    foreach (var format in _timeFormats)
-        //    {
-        //        if (DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
-        //        {
-        //            return parsedDate;
-        //        }
-        //    }
-        //    throw new FormatException($"El formato de fecha {dateString} no es válido.");
-        //}
+        private DateOnly ParseDate(string dateString)
+        {
+            var _timeFormats = new List<string> {
+                    "yyyy-MM-dd HH:mm",
+                    "dd-MM-yyyy HH:mm",
+                    "yyyy/MM/dd HH:mm",
+                    "dd/MM/yyyy HH:mm",
+                };
+            foreach (var format in _timeFormats)
+            {
+                if (DateOnly.TryParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateOnly parsedDate))
+                {
+                    return parsedDate;
+                }
+            }
+            throw new FormatException($"El formato de fecha {dateString} no es válido.");
+        }
 
     }
 }
