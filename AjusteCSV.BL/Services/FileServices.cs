@@ -5,6 +5,7 @@ using AjusteCSV.BL.Responses;
 using AutoMapper;
 using CsvHelper;
 using System.Globalization;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace AjusteCSV.BL.Services
@@ -96,16 +97,24 @@ namespace AjusteCSV.BL.Services
                 return response;
 
             }
+            catch (FormatException ex)
+            {
+                response.Message = ex.Message;
+                response.Success = false;
+                response.SuccessData = false;
+            }
             catch (Exception ex)
             {                
                 response.Message = ex.Message;
                 response.Success = false;
-            }            
+                response.SuccessData = false;
+            }
+                       
             return response;
         }
 
         //private DateTime ParseDate(string dateString)
-        //{
+        //{            
         //    foreach (var format in _timeFormats)
         //    {
         //        if (DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
