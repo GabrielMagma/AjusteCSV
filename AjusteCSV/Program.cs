@@ -31,6 +31,8 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddTransient<IFileServices, FileServices>();
 builder.Services.AddTransient<IFileDataAccess, FileDataAccess>();
+builder.Services.AddTransient<IAllAssetServices, AllAssetServices>();
+builder.Services.AddTransient<IAllAssetDataAccess, AllAssetDataAccess>();
 
 builder.Services.AddDbContext<DannteEssaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PgDbConnection")));

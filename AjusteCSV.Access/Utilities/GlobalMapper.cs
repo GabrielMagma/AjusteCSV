@@ -9,8 +9,10 @@ namespace AjusteCSV.Access.Utilities
 
         public GlobalMapper()
         {
-            CreateMap<IdeamDTO, Ideam>().ReverseMap(); 
-      
+            CreateMap<IdeamDTO, Ideam>().ReverseMap();
+            CreateMap<AllAssetDTO, AllAsset>().ReverseMap();
+            CreateMap<AllAssetDTO, AllAssetNew>().ReverseMap();
+
         }
     }
 }
