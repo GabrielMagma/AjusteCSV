@@ -3,16 +3,14 @@ using AjusteCSV.BL.DTOs;
 
 namespace AjusteCSV.BL.Interfaces
 {
-    public interface IAllAssetDataAccess
+    public interface IAllAssetOracleDataAccess
     {
-
-        public Boolean SearchData(List<AllAssetNew> request);
+        public Boolean SearchData(List<AllAsset> request);
 
         public Boolean UpdateData(List<AllAssetDTO> request);
 
         public List<AllAsset> GetListAllAsset();
 
-        public List<AllAssetNew> GetListAllAssetNews();
-
+        public List<AllAsset> GetListAllAssetNews();
     }
 }

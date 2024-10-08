@@ -1,5 +1,6 @@
 using AjusteCSV.Access.Access;
 using AjusteCSV.Access.Data;
+using AjusteCSV.Access.DataEep;
 using AjusteCSV.Access.Utilities;
 using AjusteCSV.BL.Interfaces;
 using AjusteCSV.BL.Services;
@@ -33,9 +34,14 @@ builder.Services.AddTransient<IFileServices, FileServices>();
 builder.Services.AddTransient<IFileDataAccess, FileDataAccess>();
 builder.Services.AddTransient<IAllAssetServices, AllAssetServices>();
 builder.Services.AddTransient<IAllAssetDataAccess, AllAssetDataAccess>();
+builder.Services.AddTransient<IAllAssetOracleServices, AllAssetOracleServices>();
+builder.Services.AddTransient<IAllAssetOracleDataAccess, AllAssetOracleDataAccess>();
 
 builder.Services.AddDbContext<DannteEssaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PgDbConnection")));
+
+builder.Services.AddDbContext<DannteEepContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PgDbEepConnection")));
 
 builder.Services.AddSwaggerGen(c =>
 {

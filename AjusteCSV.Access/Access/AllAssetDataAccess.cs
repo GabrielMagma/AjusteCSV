@@ -1,5 +1,4 @@
 ﻿using AjusteCSV.Access.Data;
-using AjusteCSV.Access.Utilities;
 using AjusteCSV.BL.Data;
 using AjusteCSV.BL.DTOs;
 using AjusteCSV.BL.Interfaces;
@@ -39,10 +38,9 @@ namespace AjusteCSV.Access.Access
             foreach (var item in entities)
             {
                 var EntityExist = request.FirstOrDefault(x => x.Id == item.Id);
-                //var EntityExistDTo = mapper.Map<AllAssetDTO>(EntityExist);
-                //FrameworkTypeUtility.SetProperties(item, EntityExistDTo);
-                item.State = EntityExist.State;
-                //EntityExist = mapper.Map<AllAssetNew>(EntityExistDTo);
+                
+                item.State = EntityExist.State != null ? EntityExist.State : item.State;
+                
             }
 
             context.SaveChanges();

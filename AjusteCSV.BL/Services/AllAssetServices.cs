@@ -3,10 +3,6 @@ using AjusteCSV.BL.DTOs;
 using AjusteCSV.BL.Interfaces;
 using AjusteCSV.BL.Responses;
 using AutoMapper;
-using CsvHelper;
-using System.Data.SqlClient;
-using System.Globalization;
-using System.Text;
 
 namespace AjusteCSV.BL.Services
 {
@@ -37,111 +33,124 @@ namespace AjusteCSV.BL.Services
                 var assetExistUnit = new AllAssetDTO();
                 var responseCreate = false;
                 var responseUpdate = false;
-                var dateToday = DateTime.Now;
+                var dateToday = DateOnly.FromDateTime(DateTime.Now);
 
-                foreach (var item in listAssetMap)
+                int i = 0;
+                while ((i * 1000) < listAssetMap.Count())
                 {
-                    var ListAssetExist = listAssetMap.Where(x => x.CodeSig == item.CodeSig && x.Uia == item.Uia).ToList();
-                    if (ListAssetExist.Count == 1)
+                    var subgroup = listAssetMap.Skip(i*1000).Take(1000);
+                    foreach (var item in subgroup)
                     {
-                        assetExistUnit = listAssetNewMap.FirstOrDefault(x => x.CodeSig == ListAssetExist[0].CodeSig && x.Uia == ListAssetExist[0].Uia);
+                        var ListAssetExist = subgroup.Where(x => x.CodeSig == item.CodeSig && x.Uia == item.Uia).ToList();
+                        if (ListAssetExist.Count == 1)
+                        {
+                            assetExistUnit = listAssetNewMap.FirstOrDefault(x => x.CodeSig == ListAssetExist[0].CodeSig && x.Uia == ListAssetExist[0].Uia);
 
-                        if (assetExistUnit == null)
-                        {
-                            newListAsset.Add(ListAssetExist[0]);
-                        }else if (assetExistUnit.State != ListAssetExist[0].State)
-                        {
-                            assetExistUnit.TypeAsset = ListAssetExist[0].TypeAsset;
-                            assetExistUnit.CodeSig = ListAssetExist[0].CodeSig;
-                            assetExistUnit.Uia = ListAssetExist[0].Uia;
-                            assetExistUnit.Codetaxo = ListAssetExist[0].Codetaxo;
-                            assetExistUnit.Fparent = ListAssetExist[0].Fparent;
-                            assetExistUnit.Latitude = ListAssetExist[0].Latitude;
-                            assetExistUnit.Longitude = ListAssetExist[0].Longitude;
-                            assetExistUnit.Poblation = ListAssetExist[0].Poblation;
-                            assetExistUnit.Group015 = ListAssetExist[0].Group015;
-                            assetExistUnit.Uccap14 = ListAssetExist[0].Uccap14;
-                            assetExistUnit.DateInst = ListAssetExist[0].DateInst;
-                            assetExistUnit.DateUnin = ListAssetExist[0].DateUnin;
-                            assetExistUnit.State = ListAssetExist[0].State;
-                            assetExistUnit.IdZone = ListAssetExist[0].IdZone;
-                            assetExistUnit.NameZone = ListAssetExist[0].NameZone;
-                            assetExistUnit.IdRegion = ListAssetExist[0].IdRegion;
-                            assetExistUnit.NameRegion = ListAssetExist[0].NameRegion;
-                            assetExistUnit.IdLocality = ListAssetExist[0].IdLocality;
-                            assetExistUnit.NameLocality = ListAssetExist[0].NameLocality;
-                            assetExistUnit.IdSector = ListAssetExist[0].IdSector;
-                            assetExistUnit.NameSector = ListAssetExist[0].NameSector;
-                            assetExistUnit.Address = ListAssetExist[0].Address;
-                            assetExistUnit.GeographicalCode = ListAssetExist[0].GeographicalCode;
-                            UpdateListAsset.Add(assetExistUnit);
-                        }
-                    }
-                    else
-                    {
-                        var greaterDate = ListAssetExist.OrderByDescending(x => x.DateInst).FirstOrDefault();
-                        if (greaterDate.DateInst > dateToday)
-                        {
-                            ErrorDate.Add(greaterDate);
+                            if (assetExistUnit == null)
+                            {
+                                newListAsset.Add(ListAssetExist[0]);
+                            }
+                            else if (assetExistUnit.State != ListAssetExist[0].State)
+                            {
+                                assetExistUnit.TypeAsset = ListAssetExist[0].TypeAsset;
+                                assetExistUnit.CodeSig = ListAssetExist[0].CodeSig;
+                                assetExistUnit.Uia = ListAssetExist[0].Uia;
+                                assetExistUnit.Codetaxo = ListAssetExist[0].Codetaxo;
+                                assetExistUnit.Fparent = ListAssetExist[0].Fparent;
+                                assetExistUnit.Latitude = ListAssetExist[0].Latitude;
+                                assetExistUnit.Longitude = ListAssetExist[0].Longitude;
+                                assetExistUnit.Poblation = ListAssetExist[0].Poblation;
+                                assetExistUnit.Group015 = ListAssetExist[0].Group015;
+                                assetExistUnit.Uccap14 = ListAssetExist[0].Uccap14;
+                                assetExistUnit.DateInst = ListAssetExist[0].DateInst;
+                                assetExistUnit.DateUnin = ListAssetExist[0].DateUnin;
+                                assetExistUnit.State = ListAssetExist[0].State;
+                                assetExistUnit.IdZone = ListAssetExist[0].IdZone;
+                                assetExistUnit.NameZone = ListAssetExist[0].NameZone;
+                                assetExistUnit.IdRegion = ListAssetExist[0].IdRegion;
+                                assetExistUnit.NameRegion = ListAssetExist[0].NameRegion;
+                                assetExistUnit.IdLocality = ListAssetExist[0].IdLocality;
+                                assetExistUnit.NameLocality = ListAssetExist[0].NameLocality;
+                                assetExistUnit.IdSector = ListAssetExist[0].IdSector;
+                                assetExistUnit.NameSector = ListAssetExist[0].NameSector;
+                                assetExistUnit.Address = ListAssetExist[0].Address;
+                                assetExistUnit.GeographicalCode = ListAssetExist[0].GeographicalCode;
+                                UpdateListAsset.Add(assetExistUnit);
+                            }
                         }
                         else
                         {
-                            assetExistUnit = listAssetNewMap.FirstOrDefault(x => x.CodeSig == greaterDate.CodeSig && x.Uia == greaterDate.Uia);
-                            if (assetExistUnit == null)
+                            var greaterDate = ListAssetExist.OrderByDescending(x => x.DateInst).FirstOrDefault();
+                            if (greaterDate.DateInst > dateToday)
                             {
-                                newListAsset.Add(assetExistUnit);
+                                ErrorDate.Add(greaterDate);
                             }
                             else
                             {
-                                if (assetExistUnit.State != greaterDate.State)
+                                assetExistUnit = listAssetNewMap.FirstOrDefault(x => x.CodeSig == greaterDate.CodeSig && x.Uia == greaterDate.Uia);
+                                if (assetExistUnit == null)
                                 {
+                                    newListAsset.Add(assetExistUnit);
+                                }
+                                else
+                                {
+                                    if (assetExistUnit.State != greaterDate.State)
+                                    {
 
-                                    assetExistUnit.TypeAsset = greaterDate.TypeAsset;
-                                    assetExistUnit.CodeSig = greaterDate.CodeSig;
-                                    assetExistUnit.Uia = greaterDate.Uia;
-                                    assetExistUnit.Codetaxo = greaterDate.Codetaxo;
-                                    assetExistUnit.Fparent = greaterDate.Fparent;
-                                    assetExistUnit.Latitude = greaterDate.Latitude;
-                                    assetExistUnit.Longitude = greaterDate.Longitude;
-                                    assetExistUnit.Poblation = greaterDate.Poblation;
-                                    assetExistUnit.Group015 = greaterDate.Group015;
-                                    assetExistUnit.Uccap14 = greaterDate.Uccap14;
-                                    assetExistUnit.DateInst = greaterDate.DateInst;
-                                    assetExistUnit.DateUnin = greaterDate.DateUnin;
-                                    assetExistUnit.State = greaterDate.State;
-                                    assetExistUnit.IdZone = greaterDate.IdZone;
-                                    assetExistUnit.NameZone = greaterDate.NameZone;
-                                    assetExistUnit.IdRegion = greaterDate.IdRegion;
-                                    assetExistUnit.NameRegion = greaterDate.NameRegion;
-                                    assetExistUnit.IdLocality = greaterDate.IdLocality;
-                                    assetExistUnit.NameLocality = greaterDate.NameLocality;
-                                    assetExistUnit.IdSector = greaterDate.IdSector;
-                                    assetExistUnit.NameSector = greaterDate.NameSector;
-                                    assetExistUnit.Address = greaterDate.Address;
-                                    assetExistUnit.GeographicalCode = greaterDate.GeographicalCode;
-                                    UpdateListAsset.Add(assetExistUnit);
+                                        assetExistUnit.TypeAsset = greaterDate.TypeAsset;
+                                        assetExistUnit.CodeSig = greaterDate.CodeSig;
+                                        assetExistUnit.Uia = greaterDate.Uia;
+                                        assetExistUnit.Codetaxo = greaterDate.Codetaxo;
+                                        assetExistUnit.Fparent = greaterDate.Fparent;
+                                        assetExistUnit.Latitude = greaterDate.Latitude;
+                                        assetExistUnit.Longitude = greaterDate.Longitude;
+                                        assetExistUnit.Poblation = greaterDate.Poblation;
+                                        assetExistUnit.Group015 = greaterDate.Group015;
+                                        assetExistUnit.Uccap14 = greaterDate.Uccap14;
+                                        assetExistUnit.DateInst = greaterDate.DateInst;
+                                        assetExistUnit.DateUnin = greaterDate.DateUnin;
+                                        assetExistUnit.State = greaterDate.State;
+                                        assetExistUnit.IdZone = greaterDate.IdZone;
+                                        assetExistUnit.NameZone = greaterDate.NameZone;
+                                        assetExistUnit.IdRegion = greaterDate.IdRegion;
+                                        assetExistUnit.NameRegion = greaterDate.NameRegion;
+                                        assetExistUnit.IdLocality = greaterDate.IdLocality;
+                                        assetExistUnit.NameLocality = greaterDate.NameLocality;
+                                        assetExistUnit.IdSector = greaterDate.IdSector;
+                                        assetExistUnit.NameSector = greaterDate.NameSector;
+                                        assetExistUnit.Address = greaterDate.Address;
+                                        assetExistUnit.GeographicalCode = greaterDate.GeographicalCode;
+                                        UpdateListAsset.Add(assetExistUnit);
+                                    }
                                 }
                             }
                         }
+
                     }
-                    
-                }
 
-                newListAssetCreate = mapper.Map<List<AllAssetNew>>(newListAsset);
+                    newListAssetCreate = mapper.Map<List<AllAssetNew>>(newListAsset);
 
-                if (newListAssetCreate.Count > 0)
-                {
-                    responseCreate = allAssetDataAccess.SearchData(newListAssetCreate);
-                }                
+                    if (newListAssetCreate.Count > 0)
+                    {
+                        responseCreate = allAssetDataAccess.SearchData(newListAssetCreate);
+                    }
 
-                if (UpdateListAsset.Count > 0)
-                {
-                    responseUpdate = allAssetDataAccess.UpdateData(UpdateListAsset);
-                }
+                    if (UpdateListAsset.Count > 0)
+                    {
+                        responseUpdate = allAssetDataAccess.UpdateData(UpdateListAsset);
+                    }
 
-                if (ErrorDate != null)
-                {
-                    response.Data = ErrorDate;
+                    if (ErrorDate != null)
+                    {
+                        response.Data = ErrorDate;
+                    }
+
+                    newListAsset = new List<AllAssetDTO>();
+                    newListAssetCreate = new List<AllAssetNew>();
+                    newListAssetUpdate = new List<AllAssetNew>();
+                    newListAsset = new List<AllAssetDTO>();
+
+                    i++;
                 }
 
                 response.Message = "All Registers are created and/or updated";
@@ -150,7 +159,7 @@ namespace AjusteCSV.BL.Services
                 return response;
 
             }
-            //catch (SqlException ex)
+            //catch (SqliteException ex)
             //{
             //    response.Message = ex.Message;
             //    response.Success = false;

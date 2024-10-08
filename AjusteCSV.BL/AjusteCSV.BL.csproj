@@ -10,6 +10,8 @@
     <PackageReference Include="AutoMapper" Version="13.0.1" />
     <PackageReference Include="CsvHelper" Version="33.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+    <PackageReference Include="Oracle.EntityFrameworkCore" Version="6.21.4" />
+    <PackageReference Include="Oracle.ManagedDataAccess.Core" Version="3.21.160" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
   </ItemGroup>
 
