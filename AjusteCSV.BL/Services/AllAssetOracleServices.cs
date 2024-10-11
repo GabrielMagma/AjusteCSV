@@ -556,7 +556,8 @@ namespace AjusteCSV.BL.Services
                                     allAsset.Longitude = !reader.IsDBNull(13) ? float.Parse(reader.GetString(13)) : null;
                                     allAsset.DateInst = !reader.IsDBNull(14) ? DateOnly.Parse(reader.GetString(14)) : null;
                                     allAsset.Poblation = !reader.IsDBNull(15) ? reader.GetString(15) : string.Empty;
-                                    allAsset.Address = !reader.IsDBNull(20) ? reader.GetString(20) : string.Empty;                                    
+                                    allAsset.Address = !reader.IsDBNull(20) ? reader.GetString(20) : string.Empty;
+                                    allAsset.TypeAsset = table == "SPARD_SWITCH" ? "SECCIONADOR" : "RECONECTADOR";
                                     allAssets.Add(allAsset);                                    
                                 }
                             }

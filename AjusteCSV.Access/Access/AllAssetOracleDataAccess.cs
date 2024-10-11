@@ -8,10 +8,10 @@ namespace AjusteCSV.Access.Access
 {
     public class AllAssetOracleDataAccess : IAllAssetOracleDataAccess
     {
-        protected DannteEepContext context;
+        protected DannteEepTestingContext context;
         private readonly IMapper mapper;
 
-        public AllAssetOracleDataAccess(DannteEepContext _context, IMapper _mapper)
+        public AllAssetOracleDataAccess(DannteEepTestingContext _context, IMapper _mapper)
         {
             context = _context;
             mapper = _mapper;

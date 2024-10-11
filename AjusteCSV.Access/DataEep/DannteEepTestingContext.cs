@@ -6,25 +6,26 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace AjusteCSV.Access.DataEep
 {
-    public partial class DannteEepContext : DbContext
+    public partial class DannteEepTestingContext : DbContext
     {
-        public DannteEepContext()
+        public DannteEepTestingContext()
         {
         }
 
-        public DannteEepContext(DbContextOptions<DannteEepContext> options)
+        public DannteEepTestingContext(DbContextOptions<DannteEepTestingContext> options)
             : base(options)
         {
         }
 
         public virtual DbSet<AllAsset> AllAssets { get; set; } = null!;
-        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<AllAsset>(entity =>
             {
                 entity.ToTable("all_asset");
+
+                entity.HasIndex(e => new { e.Uia, e.IdRegion, e.IdLocality }, "idx_all_asset");
 
                 entity.HasIndex(e => new { e.CodeSig, e.Id }, "idx_all_asset_code_sig_id");
 

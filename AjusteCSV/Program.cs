@@ -40,7 +40,7 @@ builder.Services.AddTransient<IAllAssetOracleDataAccess, AllAssetOracleDataAcces
 builder.Services.AddDbContext<DannteEssaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PgDbConnection")));
 
-builder.Services.AddDbContext<DannteEepContext>(options =>
+builder.Services.AddDbContext<DannteEepTestingContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PgDbEepConnection")));
 
 builder.Services.AddSwaggerGen(c =>
