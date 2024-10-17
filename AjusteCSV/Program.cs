@@ -36,6 +36,7 @@ builder.Services.AddTransient<IAllAssetServices, AllAssetServices>();
 builder.Services.AddTransient<IAllAssetDataAccess, AllAssetDataAccess>();
 builder.Services.AddTransient<IAllAssetOracleServices, AllAssetOracleServices>();
 builder.Services.AddTransient<IAllAssetOracleDataAccess, AllAssetOracleDataAccess>();
+builder.Services.AddTransient<IExcelCSVServices, ExcelCSVServices>();
 
 builder.Services.AddDbContext<DannteEssaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PgDbConnection")));
