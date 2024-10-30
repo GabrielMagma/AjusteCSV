@@ -6,7 +6,7 @@ namespace AjusteCSV.BL.Interfaces
     public interface IFileTC1ValidationServices
     {
 
-        public ResponseQuery<bool> ValidationTC1(ResponseQuery<bool> response);
+        public ResponseQuery<bool> ValidationTC1(IFormFile file, ResponseQuery<bool> response);
 
     }
 }

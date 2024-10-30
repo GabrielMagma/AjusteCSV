@@ -20,12 +20,12 @@ namespace AjusteCSV.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route(nameof(FileTC1ValidationController.ValidationTC1))]
-        public async Task<IActionResult> ValidationTC1()
+        public async Task<IActionResult> ValidationTC1(IFormFile file)
         {
             return await Task.Run(() =>
             {
                 ResponseQuery<bool> response = new ResponseQuery<bool>();
-                fileServices.ValidationTC1(response);
+                fileServices.ValidationTC1(file, response);
                 return Ok(response);
             });
         }
