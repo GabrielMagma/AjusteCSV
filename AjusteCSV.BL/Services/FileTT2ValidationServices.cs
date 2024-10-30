@@ -1,6 +1,7 @@
 ﻿using AjusteCSV.BL.Interfaces;
 using AjusteCSV.BL.Responses;
 using CsvHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Globalization;
@@ -15,20 +16,17 @@ namespace AjusteCSV.BL.Services
             _configuration = configuration;            
         }
 
-        public ResponseQuery<bool> ValidationTT2(ResponseQuery<bool> response)
+        public ResponseQuery<bool> ValidationTT2(IFormFile file, ResponseQuery<bool> response)
         {
             try
             {
 
                 string inputFolder = ".\\filesTT2";
 
-                // Procesar cada archivo .xlsx en la carpeta
+                var filePath = $"{inputFolder}\\{file.FileName}";
 
-                foreach (var filePath in Directory.GetFiles(inputFolder, "*.csv"))
-                {
-                    string[] fileLines = File.ReadAllLines(filePath);
-                    string nameFile = filePath.Split('\\').Last().Replace(".csv", "");
-                    var dataTable = new DataTable();
+                string nameFile = file.FileName.Replace(".csv", "");
+                var dataTable = new DataTable();
                     var dataTableError = new DataTable();
                     int count = 1;
                     var columns = int.Parse(_configuration["Validations:TT2Columns"]);
@@ -44,72 +42,89 @@ namespace AjusteCSV.BL.Services
                         dataTable.Columns.Add($"C{i}");
                     }
 
-                    foreach (var item in fileLines)
+                var reader = new StreamReader(file.OpenReadStream());
+
+                while (reader.Peek() >= 0)
+                {
+                    var lines = string.Empty;
+                    lines = reader.ReadLine();
+                    var valueLines = lines.Split(",");
+                    string message = string.Empty;
+                    var beacon = 0;
+                    for (int i = 0; i < columns; i++)
                     {
-                        var valueLines = item.Split(",");
-                        string message = string.Empty;
+                        if (valueLines[i] != "")
+                        {
+                            beacon++;
+                        }
+                    }
+
+                    if (beacon > 0)
+                    {
+
                         if (valueLines.Length != columns)
                         {
-                        message = "Error de cantidad de columnas llenas";
-                        RegisterError(dataTableError, item, count, nameFile, message);
+                            message = "Error de cantidad de columnas llenas";
+                            RegisterError(dataTableError, lines, count, nameFile, message);
                         }
 
                         else if (valueLines[UIAPos] == "" || valueLines[SIGPos] == "")
                         {
-                        message = "Error de la data de NIU y/o UIA, no está llena correctamente, por favor corregirla";
-                        RegisterError(dataTableError, item, count, nameFile, message);
+                            message = "Error de la data de NIU y/o UIA, no está llena correctamente, por favor corregirla";
+                            RegisterError(dataTableError, lines, count, nameFile, message);
                         }
 
                         else if (valueLines[2].Length != 2)
                         {
-                        message = "Error de la data de grupo calidad, debe ser sólamente de dos dígitos, por favor corregirla";
-                        RegisterError(dataTableError, item, count, nameFile, message);
+                            message = "Error de la data de grupo calidad, debe ser sólamente de dos dígitos, por favor corregirla";
+                            RegisterError(dataTableError, lines, count, nameFile, message);
                         }
 
                         else if (valueLines[7] == "" || valueLines[8] == "")
                         {
-                        message = "Error de la data de Latitud y/o Longitud, no está llena correctamente, por favor corregirla";
-                        RegisterError(dataTableError, item, count, nameFile, message);
+                            message = "Error de la data de Latitud y/o Longitud, no está llena correctamente, por favor corregirla";
+                            RegisterError(dataTableError, lines, count, nameFile, message);
                         }
 
                         else if (valueLines[11] != "")
                         {
-                        var datefile = ParseDate(valueLines[11]);
-                        var dateToday = DateTime.Now;
-                        if (datefile.Contains("Error"))
-                        {
-                            message = "Error de la fecha en la data, no tiene el formato correcto";
-                            RegisterError(dataTableError, item, count, nameFile, message);
+                            var datefile = ParseDate(valueLines[11]);
+                            var dateToday = DateTime.Now;
+                            if (datefile.Contains("Error"))
+                            {
+                                message = "Error de la fecha en la data, no tiene el formato correcto";
+                                RegisterError(dataTableError, lines, count, nameFile, message);
+                            }
+                            else if (DateTime.Parse(datefile) > dateToday)
+                            {
+                                message = "Error de la fecha en la data, no puede ser mayor a la fecha actual";
+                                RegisterError(dataTableError, lines, count, nameFile, message);
+                            }
+                            else
+                            {
+                                InsertData(dataTable, valueLines, columns);
+                            }
                         }
-                        else if (DateTime.Parse(datefile) > dateToday)
-                        {
-                            message = "Error de la fecha en la data, no puede ser mayor a la fecha actual";
-                            RegisterError(dataTableError, item, count, nameFile, message);
-                        }
+
                         else
                         {
                             InsertData(dataTable, valueLines, columns);
                         }
-                        }
-
-                        else
-                        {
-                            InsertData(dataTable, valueLines, columns);
-                        }
-
+                    }
                         count++;
-                    }
+                        beacon = 0;
+                }
 
-                    if (dataTable.Rows.Count > 0)
-                    {
-                        createCSV(dataTable, filePath, columns);
-                    }
+                if (dataTable.Rows.Count > 0)
+                {
+                    createCSV(dataTable, filePath, columns);
+                }
 
-                    if (dataTableError.Rows.Count > 0)
-                    {
-                        createCSVError(dataTableError, filePath);
-                    }
-                }                
+                if (dataTableError.Rows.Count > 0)
+                {
+                    createCSVError(dataTableError, filePath);
+                }
+                                
                 response.Message = "All files are created";
                 response.SuccessData = true;
                 response.Success = true;

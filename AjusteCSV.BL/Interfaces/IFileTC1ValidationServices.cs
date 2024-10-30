@@ -1,4 +1,5 @@
 ﻿using AjusteCSV.BL.Responses;
+using Microsoft.AspNetCore.Http;
 
 namespace AjusteCSV.BL.Interfaces
 {

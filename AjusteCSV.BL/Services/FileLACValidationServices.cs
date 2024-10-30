@@ -1,6 +1,7 @@
 ﻿using AjusteCSV.BL.Interfaces;
 using AjusteCSV.BL.Responses;
 using CsvHelper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Globalization;
@@ -15,110 +16,115 @@ namespace AjusteCSV.BL.Services
             _configuration = configuration;
         }
 
-        public ResponseQuery<bool> ValidationLAC(ResponseQuery<bool> response)
+        public ResponseQuery<bool> ValidationLAC(IFormFile file, ResponseQuery<bool> response)
         {
             try
             {
                 string inputFolder = ".\\filesLAC";
 
-                // Procesar cada archivo .xlsx en la carpeta
-                foreach (var filePath in Directory.GetFiles(inputFolder, "*.csv"))
-                {
-                    string[] fileLines = File.ReadAllLines(filePath);
-                    string nameFile = filePath.Split('\\').Last().Replace(".csv", "");
-                    var dataTable = new DataTable();
-                    var dataTableError = new DataTable();
-                    int count = 1;
-                    var columns = int.Parse(_configuration["Validations:LACColumns"]);
-                    // columnas tabla error
-                    dataTableError.Columns.Add("C1");
-                    dataTableError.Columns.Add("C2");
+                var filePath = $"{inputFolder}\\{file.FileName}";
+                    
+                string nameFile = file.FileName.Replace(".csv","");
+                var dataTable = new DataTable();
+                var dataTableError = new DataTable();
+                int count = 1;
+                var columns = int.Parse(_configuration["Validations:LACColumns"]);
+                // columnas tabla error
+                dataTableError.Columns.Add("C1");
+                dataTableError.Columns.Add("C2");
 
-                    // columnas tabla datos correctos
-                    for (int i = 1; i <= columns; i++)
+                // columnas tabla datos correctos
+                for (int i = 1; i <= columns; i++)
+                {
+                    dataTable.Columns.Add($"C{i}");
+                }
+
+                var reader = new StreamReader(file.OpenReadStream());
+                    
+                while (reader.Peek() >= 0)
+                {
+                    var lines = string.Empty;
+                    lines = reader.ReadLine();
+                    var valueLines = lines.Split(",");
+                    string message = string.Empty;
+                    var beacon = 0;
+                    for (int i = 0; i < columns; i++)
                     {
-                        dataTable.Columns.Add($"C{i}");
+                        if (valueLines[i] != "")
+                        {
+                            beacon++;
+                        }
                     }
 
-                    foreach (var item in fileLines)
+                if (beacon > 0)
+                {
+                    if (valueLines.Length != columns)
                     {
-                        var valueLines = item.Split(",");
-                        string message = string.Empty;
-                        if (valueLines.Length != columns)
-                        {
-                            message = "Error de cantidad de columnas llenas";
-                            RegisterError(dataTableError, item, count, nameFile, message);
-                        }
+                        message = "Error de cantidad de columnas llenas";
+                        RegisterError(dataTableError, lines, count, nameFile, message);
+                    }
 
-                        else if (valueLines[0] == "NA" && (valueLines[1] != "" || valueLines[2] != "" || valueLines[5] != ""
-                            && valueLines[6] != "" || valueLines[7] != "" || valueLines[8] != "" || valueLines[9] != ""))
-                        {
-                            message = "Error de la data, no está llena correctamente";
-                            RegisterError(dataTableError, item, count, nameFile, message);
-                        }
+                    else if (valueLines[0] == "NA" && (valueLines[1] != "" || valueLines[2] != "" || valueLines[5] != ""
+                        && valueLines[6] != "" || valueLines[7] != "" || valueLines[8] != "" || valueLines[9] != ""))
+                    {
+                        message = "Error de la data, no está llena correctamente";
+                        RegisterError(dataTableError, lines, count, nameFile, message);
+                    }
 
-                        else if (valueLines[0] != "NA" && valueLines[1] == "")
-                        {
-                            message = "Error de las fechas en la data, no están llenas correctamente";
-                            RegisterError(dataTableError, item, count, nameFile, message);
-                        }
+                    else if (valueLines[0] != "NA" && valueLines[1] == "")
+                    {
+                        message = "Error de las fechas en la data, no están llenas correctamente";
+                        RegisterError(dataTableError, lines, count, nameFile, message);
+                    }
 
-                        else if (valueLines[0] != "NA" && valueLines[2] != "" && valueLines[6] == "S")
-                        {
-                            message = "Error de la fecha de terminación y/o estado en la data, no están llenas correctamente";
-                            RegisterError(dataTableError, item, count, nameFile, message);
-                        }
+                    else if (valueLines[0] != "NA" && valueLines[2] != "" && valueLines[6] == "S")
+                    {
+                        message = "Error de la fecha de terminación y/o estado en la data, no están llenas correctamente";
+                        RegisterError(dataTableError, lines, count, nameFile, message);
+                    }
 
-                        else if (valueLines[0] != "NA" && valueLines[1] != "")
+                    else if (valueLines[0] != "NA" && valueLines[1] != "")
+                    {
+                        var datefile = ParseDate(valueLines[1]);
+                        var dateToday = DateTime.Now;
+                        if (datefile.Contains("Error"))
                         {
-                            var datefile = ParseDate(valueLines[1]);
-                            var dateToday = DateTime.Now;
-                            if (datefile.Contains("Error"))
-                            {
-                                message = "Error de la fecha en la data, no tiene el formato correcto";
-                                RegisterError(dataTableError, item, count, nameFile, message);
-                            }
-                            else if (DateTime.Parse(datefile) > dateToday)
-                            {
-                                message = "Error de la fecha en la data, no puede ser mayor a la fecha actual";
-                                RegisterError(dataTableError, item, count, nameFile, message);
-                            }
-                            else
-                            {
-                                InsertData(dataTable, valueLines, columns);
-                            }
+                            message = "Error de la fecha en la data, no tiene el formato correcto";
+                            RegisterError(dataTableError, lines, count, nameFile, message);
                         }
-
+                        else if (DateTime.Parse(datefile) > dateToday)
+                        {
+                            message = "Error de la fecha en la data, no puede ser mayor a la fecha actual";
+                            RegisterError(dataTableError, lines, count, nameFile, message);
+                        }
                         else
                         {
                             InsertData(dataTable, valueLines, columns);
                         }
-
-                        count++;
                     }
 
-                    if (dataTable.Rows.Count > 0)
-                    {
-                        createCSV(dataTable, filePath, columns);
-                    }
-
-                    if (dataTableError.Rows.Count > 0)
-                    {
-                        createCSVError(dataTableError, filePath);
-                    }
-                
                 }
+
+                    count++;
+                    beacon = 0;
+                }
+
+                if (dataTable.Rows.Count > 0)
+                {
+                    createCSV(dataTable, filePath, columns);
+                }
+
+                if (dataTableError.Rows.Count > 0)
+                {
+                    createCSVError(dataTableError, filePath);
+                }
+                                
                 response.Message = "All files are created";
                 response.SuccessData = true;
                 response.Success = true;
                 return response;
             }
-            //catch (SqliteException ex)
-            //{
-            //    response.Message = ex.Message;
-            //    response.Success = false;
-            //    response.SuccessData = false;
-            //}
+
             catch (FormatException ex)
             {
 

@@ -15,19 +15,17 @@ namespace AjusteCSV.Controllers
             fileServices = _fileServices;
         }
         /// <summary>
-        /// Servicio que toma el nombre de un archivo de datos CSV guardado en una ruta específica del programa, lo convierte al formato de datos requerido
-        /// y lo guarda en Base de datos
-        /// </summary>
-        /// <param name="String"></param>
+        /// Servicio que toma el archivo de datos CSV TT2 y lo valida, generando archivo de registros correctos y archivo de errores
+        /// </summary>        
         /// <returns></returns>  
         [HttpPost]
         [Route(nameof(FileTT2ValidationController.ValidationTT2))]
-        public async Task<IActionResult> ValidationTT2()
+        public async Task<IActionResult> ValidationTT2(IFormFile file)
         {
             return await Task.Run(() =>
             {
                 ResponseQuery<bool> response = new ResponseQuery<bool>();
-                fileServices.ValidationTT2(response);
+                fileServices.ValidationTT2(file, response);
                 return Ok(response);
             });
         }
