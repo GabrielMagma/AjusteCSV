@@ -1,4 +1,5 @@
 ﻿using AjusteCSV.Access.Data;
+using AjusteCSV.Access.DataEep;
 using AjusteCSV.BL.Data;
 using AjusteCSV.BL.DTOs;
 using AjusteCSV.BL.Interfaces;
@@ -8,10 +9,10 @@ namespace AjusteCSV.Access.Access
 {
     public class AllAssetDataAccess : IAllAssetDataAccess
     {
-        protected DannteEssaContext context;
+        protected DannteEepTestingContext context;
         private readonly IMapper mapper;
 
-        public AllAssetDataAccess(DannteEssaContext _context, IMapper _mapper)
+        public AllAssetDataAccess(DannteEepTestingContext _context, IMapper _mapper)
         {
             context = _context;
             mapper = _mapper;

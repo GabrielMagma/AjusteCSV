@@ -37,8 +37,11 @@ builder.Services.AddTransient<IAllAssetDataAccess, AllAssetDataAccess>();
 builder.Services.AddTransient<IAllAssetOracleServices, AllAssetOracleServices>();
 builder.Services.AddTransient<IAllAssetOracleDataAccess, AllAssetOracleDataAccess>();
 builder.Services.AddTransient<IExcelCSVServices, ExcelCSVServices>();
+builder.Services.AddTransient<IFileLACValidationServices, FileLACValidationServices>();
+builder.Services.AddTransient<IFileTC1ValidationServices, FileTC1ValidationServices>();
+builder.Services.AddTransient<IFileTT2ValidationServices, FileTT2ValidationServices>();
 
-builder.Services.AddDbContext<DannteEssaContext>(options =>
+builder.Services.AddDbContext<DannteEssaTestingContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PgDbConnection")));
 
 builder.Services.AddDbContext<DannteEepTestingContext>(options =>

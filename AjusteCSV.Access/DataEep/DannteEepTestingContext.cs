@@ -18,6 +18,8 @@ namespace AjusteCSV.Access.DataEep
         }
 
         public virtual DbSet<AllAsset> AllAssets { get; set; } = null!;
+        public virtual DbSet<AllAssetNew> AllAssetNews { get; set; } = null!;
+        public virtual DbSet<Ideam> Ideams { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -138,6 +140,143 @@ namespace AjusteCSV.Access.DataEep
                     .HasColumnName("uia")
                     .HasDefaultValueSql("'-1'::character varying")
                     .HasComment("Código de identificación del activo; está asociado al code_sig\nVaría si se reemplaza el activo");
+            });
+
+            modelBuilder.Entity<AllAssetNew>(entity =>
+            {
+                entity.ToTable("all_asset_new", "machine");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.Address)
+                    .HasMaxLength(200)
+                    .HasColumnName("address")
+                    .HasDefaultValueSql("'-1'::character varying");
+
+                entity.Property(e => e.CodeSig)
+                    .HasMaxLength(32)
+                    .HasColumnName("code_sig")
+                    .HasDefaultValueSql("'-1'::character varying");
+
+                entity.Property(e => e.Codetaxo)
+                    .HasMaxLength(32)
+                    .HasColumnName("codetaxo")
+                    .HasDefaultValueSql("'-1'::character varying");
+
+                entity.Property(e => e.DateInst).HasColumnName("date_inst");
+
+                entity.Property(e => e.DateUnin).HasColumnName("date_unin");
+
+                entity.Property(e => e.Fparent)
+                    .HasMaxLength(16)
+                    .HasColumnName("fparent")
+                    .HasDefaultValueSql("'-1'::character varying");
+
+                entity.Property(e => e.GeographicalCode).HasColumnName("geographical_code");
+
+                entity.Property(e => e.Group015)
+                    .HasMaxLength(2)
+                    .HasColumnName("group015")
+                    .HasDefaultValueSql("'-1'::character varying");
+
+                entity.Property(e => e.IdLocality).HasColumnName("id_locality");
+
+                entity.Property(e => e.IdRegion).HasColumnName("id_region");
+
+                entity.Property(e => e.IdSector).HasColumnName("id_sector");
+
+                entity.Property(e => e.IdZone).HasColumnName("id_zone");
+
+                entity.Property(e => e.Latitude)
+                    .HasColumnName("latitude")
+                    .HasDefaultValueSql("0");
+
+                entity.Property(e => e.Longitude)
+                    .HasColumnName("longitude")
+                    .HasDefaultValueSql("0");
+
+                entity.Property(e => e.NameLocality)
+                    .HasMaxLength(100)
+                    .HasColumnName("name_locality");
+
+                entity.Property(e => e.NameRegion)
+                    .HasMaxLength(100)
+                    .HasColumnName("name_region");
+
+                entity.Property(e => e.NameSector)
+                    .HasMaxLength(100)
+                    .HasColumnName("name_sector");
+
+                entity.Property(e => e.NameZone)
+                    .HasMaxLength(100)
+                    .HasColumnName("name_zone");
+
+                entity.Property(e => e.Poblation)
+                    .HasMaxLength(2)
+                    .HasColumnName("poblation")
+                    .HasDefaultValueSql("'-1'::character varying");
+
+                entity.Property(e => e.State)
+                    .HasColumnName("state")
+                    .HasDefaultValueSql("2");
+
+                entity.Property(e => e.TypeAsset)
+                    .HasMaxLength(32)
+                    .HasColumnName("type_asset")
+                    .HasDefaultValueSql("'-1'::character varying");
+
+                entity.Property(e => e.Uccap14)
+                    .HasMaxLength(6)
+                    .HasColumnName("uccap14")
+                    .HasDefaultValueSql("'-1'::character varying");
+
+                entity.Property(e => e.Uia)
+                    .HasMaxLength(50)
+                    .HasColumnName("uia")
+                    .HasDefaultValueSql("'-1'::character varying");
+            });
+
+            modelBuilder.Entity<Ideam>(entity =>
+            {
+                entity.ToTable("ideam", "machine");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Altitude).HasColumnName("altitude");
+
+                entity.Property(e => e.Date).HasColumnName("date");
+
+                entity.Property(e => e.Department)
+                    .HasMaxLength(255)
+                    .HasColumnName("department");
+
+                entity.Property(e => e.Frequency)
+                    .HasMaxLength(20)
+                    .HasColumnName("frequency");
+
+                entity.Property(e => e.Latitude).HasColumnName("latitude");
+
+                entity.Property(e => e.Longitude).HasColumnName("longitude");
+
+                entity.Property(e => e.Municipality)
+                    .HasMaxLength(255)
+                    .HasColumnName("municipality");
+
+                entity.Property(e => e.Parameterid)
+                    .HasMaxLength(20)
+                    .HasColumnName("parameterid");
+
+                entity.Property(e => e.Precipitation).HasColumnName("precipitation");
+
+                entity.Property(e => e.Stationcode)
+                    .HasMaxLength(10)
+                    .HasColumnName("stationcode");
+
+                entity.Property(e => e.Stationname)
+                    .HasMaxLength(255)
+                    .HasColumnName("stationname");
             });
 
             OnModelCreatingPartial(modelBuilder);
