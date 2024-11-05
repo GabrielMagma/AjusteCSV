@@ -11,9 +11,12 @@ namespace AjusteCSV.BL.Services
     public class FileLACValidationServices : IFileLACValidationServices
     {
         private readonly IConfiguration _configuration;
+        private readonly string[] _timeFormats;
         public FileLACValidationServices(IConfiguration configuration)
         {
             _configuration = configuration;
+            _timeFormats = configuration.GetSection("DateTimeFormats").Get<string[]>();
+
         }
 
         public ResponseQuery<bool> ValidationLAC(IFormFile file, ResponseQuery<bool> response)
@@ -29,6 +32,7 @@ namespace AjusteCSV.BL.Services
                 var dataTableError = new DataTable();
                 int count = 1;
                 var columns = int.Parse(_configuration["Validations:LACColumns"]);
+                var UIAPos = int.Parse(_configuration["Validations:LACUIA"]);
                 // columnas tabla error
                 dataTableError.Columns.Add("C1");
                 dataTableError.Columns.Add("C2");
@@ -64,7 +68,13 @@ namespace AjusteCSV.BL.Services
                         RegisterError(dataTableError, lines, count, nameFile, message);
                     }
 
-                    else if (valueLines[0] == "NA" && (valueLines[1] != "" || valueLines[2] != "" || valueLines[5] != ""
+                        else if (valueLines[UIAPos] == "")
+                        {
+                            message = "Error en el código UIA, no puede ser nulo";
+                            RegisterError(dataTableError, lines, count, nameFile, message);
+                        }
+
+                        else if (valueLines[0] == "NA" && (valueLines[1] != "" || valueLines[2] != "" || valueLines[5] != ""
                         && valueLines[6] != "" || valueLines[7] != "" || valueLines[8] != "" || valueLines[9] != ""))
                     {
                         message = "Error de la data, no está llena correctamente";
@@ -207,22 +217,22 @@ namespace AjusteCSV.BL.Services
             }
         }
 
-        private static string ParseDate(string dateString)
+        private string ParseDate(string dateString)
         {
-            var _timeFormats = new List<string> {
-                    "yyyy-MM-dd HH:mm:ss",
-                    "yyyy-MM-dd HH:mm",
-                    "dd-MM-yyyy HH:mm",
-                    "yyyy/MM/dd HH:mm",
-                    "dd/MM/yyyy HH:mm",
-                    "dd/MM/yyyy HH:mm:ss",
-                    "dd/MM/yyyy",
-                    "d/MM/yyyy",
-                    "dd-MM-yyyy",
-                };
+            //var _timeFormats = new List<string> {
+            //        "yyyy-MM-dd HH:mm:ss",
+            //        "yyyy-MM-dd HH:mm",
+            //        "dd-MM-yyyy HH:mm",
+            //        "yyyy/MM/dd HH:mm",
+            //        "dd/MM/yyyy HH:mm",
+            //        "dd/MM/yyyy HH:mm:ss",
+            //        "dd/MM/yyyy",
+            //        "d/MM/yyyy",
+            //        "dd-MM-yyyy",
+            //    };            
             foreach (var format in _timeFormats)
             {
-                if (DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                if (DateTime.TryParseExact(dateString, format.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
                 {
                     return parsedDate.ToString();
                 }

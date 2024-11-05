@@ -1,11 +1,13 @@
 ﻿using AjusteCSV.BL.Interfaces;
 using AjusteCSV.BL.Responses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AjusteCSV.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class FileLACValidationController : ControllerBase
     {
         readonly IFileLACValidationServices fileServices;
@@ -20,6 +22,7 @@ namespace AjusteCSV.Controllers
         /// <returns></returns>  
         [HttpPost]
         [Route(nameof(FileLACValidationController.ValidationLAC))]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ValidationLAC(IFormFile file)
         {
             return await Task.Run(() =>

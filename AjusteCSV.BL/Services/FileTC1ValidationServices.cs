@@ -11,9 +11,11 @@ namespace AjusteCSV.BL.Services
     public class FileTC1ValidationServices : IFileTC1ValidationServices
     {
         private readonly IConfiguration _configuration;
+        private readonly string[] _timeFormats;
         public FileTC1ValidationServices(IConfiguration configuration)
         {
             _configuration = configuration;
+            _timeFormats = configuration.GetSection("DateTimeFormats").Get<string[]>();
         }
 
         public ResponseQuery<bool> ValidationTC1(IFormFile file, ResponseQuery<bool> response)
@@ -205,22 +207,23 @@ namespace AjusteCSV.BL.Services
             }
         }
 
-        private static string ParseDate(string dateString)
+        private string ParseDate(string dateString)
         {
-            var _timeFormats = new List<string> {
-                    "yyyy-MM-dd HH:mm:ss",
-                    "yyyy-MM-dd HH:mm",
-                    "dd-MM-yyyy HH:mm",
-                    "yyyy/MM/dd HH:mm",
-                    "dd/MM/yyyy HH:mm",
-                    "dd/MM/yyyy HH:mm:ss",
-                    "dd/MM/yyyy",
-                    "d/MM/yyyy",
-                    "dd-MM-yyyy",
-                };
+            //var _timeFormats = new List<string> {
+            //        "yyyy-MM-dd HH:mm:ss",
+            //        "yyyy-MM-dd HH:mm",
+            //        "dd-MM-yyyy HH:mm",
+            //        "yyyy/MM/dd HH:mm",
+            //        "dd/MM/yyyy HH:mm",
+            //        "dd/MM/yyyy HH:mm:ss",
+            //        "dd/MM/yyyy",
+            //        "d/MM/yyyy",
+            //        "dd-MM-yyyy",
+            //    };            
+            
             foreach (var format in _timeFormats)
             {
-                if (DateTime.TryParseExact(dateString, format, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                if (DateTime.TryParseExact(dateString, format.ToString(), CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
                 {
                     return parsedDate.ToString();
                 }

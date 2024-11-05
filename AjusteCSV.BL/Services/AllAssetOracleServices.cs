@@ -68,6 +68,16 @@ namespace AjusteCSV.BL.Services
                                 assetExistUnit.Poblation = ListAssetExist[0].Poblation;
                                 assetExistUnit.Address = ListAssetExist[0].Address;                                
                                 assetExistUnit.TypeAsset = "TRANSFORMADOR";
+                                assetExistUnit.DateUnin = ListAssetExist[0].DateUnin;
+                                assetExistUnit.State = ListAssetExist[0].State;
+                                assetExistUnit.IdRegion = ListAssetExist[0].IdRegion;
+                                assetExistUnit.NameRegion = ListAssetExist[0].NameRegion;
+                                assetExistUnit.IdZone = ListAssetExist[0].IdZone;
+                                assetExistUnit.NameZone = ListAssetExist[0].NameZone;
+                                assetExistUnit.IdLocality = ListAssetExist[0].IdLocality;
+                                assetExistUnit.NameLocality = ListAssetExist[0].NameLocality;
+                                assetExistUnit.IdSector = ListAssetExist[0].IdSector;
+                                assetExistUnit.NameSector = ListAssetExist[0].NameSector;
                                 //assetExistUnit.TypeAsset = "SECCIONADOR";
                                 //assetExistUnit.TypeAsset = "RECONECTADOR";
 
@@ -215,6 +225,16 @@ namespace AjusteCSV.BL.Services
                                 //assetExistUnit.TypeAsset = "TRANSFORMADOR";
                                 assetExistUnit.TypeAsset = "SECCIONADOR";
                                 //assetExistUnit.TypeAsset = "RECONECTADOR";
+                                assetExistUnit.DateUnin = ListAssetExist[0].DateUnin;
+                                assetExistUnit.State = ListAssetExist[0].State;
+                                assetExistUnit.IdRegion = ListAssetExist[0].IdRegion;
+                                assetExistUnit.NameRegion = ListAssetExist[0].NameRegion;
+                                assetExistUnit.IdZone = ListAssetExist[0].IdZone;
+                                assetExistUnit.NameZone = ListAssetExist[0].NameZone;
+                                assetExistUnit.IdLocality = ListAssetExist[0].IdLocality;
+                                assetExistUnit.NameLocality = ListAssetExist[0].NameLocality;
+                                assetExistUnit.IdSector = ListAssetExist[0].IdSector;
+                                assetExistUnit.NameSector = ListAssetExist[0].NameSector;
 
                                 UpdateListAsset.Add(assetExistUnit);
                             }
@@ -359,6 +379,16 @@ namespace AjusteCSV.BL.Services
                                 //assetExistUnit.TypeAsset = "TRANSFORMADOR";
                                 //assetExistUnit.TypeAsset = "SECCIONADOR";
                                 assetExistUnit.TypeAsset = "RECONECTADOR";
+                                assetExistUnit.DateUnin = ListAssetExist[0].DateUnin;
+                                assetExistUnit.State = ListAssetExist[0].State;
+                                assetExistUnit.IdRegion = ListAssetExist[0].IdRegion;
+                                assetExistUnit.NameRegion = ListAssetExist[0].NameRegion;
+                                assetExistUnit.IdZone = ListAssetExist[0].IdZone;
+                                assetExistUnit.NameZone = ListAssetExist[0].NameZone;
+                                assetExistUnit.IdLocality = ListAssetExist[0].IdLocality;
+                                assetExistUnit.NameLocality = ListAssetExist[0].NameLocality;
+                                assetExistUnit.IdSector = ListAssetExist[0].IdSector;
+                                assetExistUnit.NameSector = ListAssetExist[0].NameSector;
 
                                 UpdateListAsset.Add(assetExistUnit);
                             }
@@ -493,6 +523,16 @@ namespace AjusteCSV.BL.Services
                                     allAsset.Poblation = !reader.IsDBNull(16) ? reader.GetString(16) : string.Empty;
                                     allAsset.Address = !reader.IsDBNull(19) ? reader.GetString(19) : string.Empty;
                                     allAsset.TypeAsset = "TRANSFORMADOR";
+                                    allAsset.DateUnin = DateOnly.Parse("2099-12-31");
+                                    allAsset.State = 2;
+                                    allAsset.IdRegion = 1;
+                                    allAsset.NameRegion = "GENERAL";
+                                    allAsset.IdZone = 1;
+                                    allAsset.NameZone = "ZONA GENERAL";
+                                    allAsset.IdLocality = 1;
+                                    allAsset.NameLocality = "LOCALIDAD GENERAL";
+                                    allAsset.IdSector = 1;
+                                    allAsset.NameSector = "SECTOR GENERAL";                                    
                                     allAssets.Add(allAsset);
                                 }
                             }
@@ -558,6 +598,16 @@ namespace AjusteCSV.BL.Services
                                     allAsset.Poblation = !reader.IsDBNull(15) ? reader.GetString(15) : string.Empty;
                                     allAsset.Address = !reader.IsDBNull(20) ? reader.GetString(20) : string.Empty;
                                     allAsset.TypeAsset = table == "SPARD_SWITCH" ? "SECCIONADOR" : "RECONECTADOR";
+                                    allAsset.DateUnin = DateOnly.Parse("2099-12-31");
+                                    allAsset.State = 2;
+                                    allAsset.IdRegion = 1;
+                                    allAsset.NameRegion = "GENERAL";
+                                    allAsset.IdZone = 1;
+                                    allAsset.NameZone = "ZONA GENERAL";
+                                    allAsset.IdLocality = 1;
+                                    allAsset.NameLocality = "LOCALIDAD GENERAL";
+                                    allAsset.IdSector = 1;
+                                    allAsset.NameSector = "SECTOR GENERAL";
                                     allAssets.Add(allAsset);                                    
                                 }
                             }
