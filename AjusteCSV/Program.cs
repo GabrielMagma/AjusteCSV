@@ -46,6 +46,8 @@ builder.Services.AddTransient<IFileLACValidationServices, FileLACValidationServi
 builder.Services.AddTransient<IFileTC1ValidationServices, FileTC1ValidationServices>();
 builder.Services.AddTransient<IFileTT2ValidationServices, FileTT2ValidationServices>();
 builder.Services.AddTransient<ITokenServices, TokenServices>();
+builder.Services.AddTransient<IExcelCSVCompensacionesEEPServices, ExcelCSVCompensacionesEEPServices>();
+builder.Services.AddTransient<IExcelCSVCompensacionesESSAServices, ExcelCSVCompensacionesESSAServices>();
 
 builder.Services.AddDbContext<DannteEssaTestingContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PgDbConnection")));
