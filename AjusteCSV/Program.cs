@@ -1,5 +1,6 @@
 using AjusteCSV.Access.Access;
 using AjusteCSV.Access.Data;
+using AjusteCSV.Access.DataDev;
 using AjusteCSV.Access.DataEep;
 using AjusteCSV.Access.Utilities;
 using AjusteCSV.BL.Interfaces;
@@ -48,12 +49,19 @@ builder.Services.AddTransient<IFileTT2ValidationServices, FileTT2ValidationServi
 builder.Services.AddTransient<ITokenServices, TokenServices>();
 builder.Services.AddTransient<IExcelCSVCompensacionesEEPServices, ExcelCSVCompensacionesEEPServices>();
 builder.Services.AddTransient<IExcelCSVCompensacionesESSAServices, ExcelCSVCompensacionesESSAServices>();
+builder.Services.AddTransient<IRayosCSVServices, RayosCSVServices>();
+builder.Services.AddTransient<IRayosCSVDataAccess, RayosCSVDataAccess>();
+builder.Services.AddTransient<IRamalesServices, RamalesServices>();
+builder.Services.AddTransient<IRamalesDataAccess, RamalesDataAccess>();
 
 builder.Services.AddDbContext<DannteEssaTestingContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PgDbConnection")));
 
 builder.Services.AddDbContext<DannteEepTestingContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PgDbEepConnection")));
+
+builder.Services.AddDbContext<DannteDevelopmentContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("PgDbDevConnection")));
 
 builder.Services.AddSwaggerGen(c =>
 {
