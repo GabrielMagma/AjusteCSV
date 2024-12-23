@@ -3,7 +3,7 @@ using AjusteCSV.BL.DTOs;
 
 namespace AjusteCSV.BL.Interfaces
 {
-    public interface IAllAssetDataAccess
+    public interface IAllAssetsDataAccess
     {
 
         public Boolean SearchData(List<AllAssetNew> request);

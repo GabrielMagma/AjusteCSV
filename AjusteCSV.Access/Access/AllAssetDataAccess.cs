@@ -7,7 +7,7 @@ using AutoMapper;
 
 namespace AjusteCSV.Access.Access
 {
-    public class AllAssetDataAccess : IAllAssetDataAccess
+    public class AllAssetDataAccess : IAllAssetsDataAccess
     {
         protected DannteEepTestingContext context;
         private readonly IMapper mapper;

@@ -9,9 +9,9 @@ namespace AjusteCSV.Controllers
     [ApiController]
     public class AllAssetController : ControllerBase
     {
-        readonly IAllAssetServices allAssetServices;
+        readonly IAllAssetsServices allAssetServices;
 
-        public AllAssetController(IAllAssetServices _AllAssetServices)
+        public AllAssetController(IAllAssetsServices _AllAssetServices)
         {
             allAssetServices = _AllAssetServices;
         }

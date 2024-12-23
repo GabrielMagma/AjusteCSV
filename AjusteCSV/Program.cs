@@ -38,8 +38,8 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddTransient<IFileServices, FileServices>();
 builder.Services.AddTransient<IFileDataAccess, FileDataAccess>();
-builder.Services.AddTransient<IAllAssetServices, AllAssetServices>();
-builder.Services.AddTransient<IAllAssetDataAccess, AllAssetDataAccess>();
+builder.Services.AddTransient<IAllAssetsServices, AllAssetServices>();
+builder.Services.AddTransient<IAllAssetsDataAccess, AllAssetDataAccess>();
 builder.Services.AddTransient<IAllAssetOracleServices, AllAssetOracleServices>();
 builder.Services.AddTransient<IAllAssetOracleDataAccess, AllAssetOracleDataAccess>();
 builder.Services.AddTransient<IExcelCSVServices, ExcelCSVServices>();

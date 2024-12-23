@@ -6,11 +6,11 @@ using AutoMapper;
 
 namespace AjusteCSV.BL.Services
 {
-    public class AllAssetServices : IAllAssetServices
+    public class AllAssetServices : IAllAssetsServices
     {
-        private readonly IAllAssetDataAccess allAssetDataAccess;
+        private readonly IAllAssetsDataAccess allAssetDataAccess;
         private readonly IMapper mapper;
-        public AllAssetServices(IAllAssetDataAccess _AllAssetDataAccess, IMapper _mapper)
+        public AllAssetServices(IAllAssetsDataAccess _AllAssetDataAccess, IMapper _mapper)
         {
             allAssetDataAccess = _AllAssetDataAccess;
             mapper = _mapper;
