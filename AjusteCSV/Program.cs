@@ -19,14 +19,27 @@ builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowFrontend",
+//        builder => builder
+//            .WithOrigins("http://127.0.0.1:5500", "https://localhost:7155/", "https://localhost:7189/") // Dirección de tu frontend
+//            .AllowAnyMethod()
+//            .AllowAnyHeader());
+//});
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowLocalhost",
+    options.AddPolicy("AllowFrontend",
         builder => builder
-            .WithOrigins("http://127.0.0.1:5500") // Dirección de tu frontend
+            .WithOrigins("https://127.0.0.1:7155", "https://localhost:7189")
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .AllowCredentials()); // Necesario para SignalR
 });
+
+// signalR
+builder.Services.AddSignalR();
 
 var mapperConfig = new MapperConfiguration(mc =>
 {
@@ -124,12 +137,16 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AjusteCSV v
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-app.UseCors("AllowLocalhost");
+//app.UseCors("AllowLocalhost");
 
 app.UseRouting();
 
+app.UseCors("AllowFrontend");
+
 app.UseAuthentication();
 app.UseAuthorization();
+
+//app.MapHub<NotificationHub>("/notiHub");
 
 app.MapControllerRoute(
     name: "default",

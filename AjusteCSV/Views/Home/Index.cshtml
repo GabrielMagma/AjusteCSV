@@ -1,8 +1,34 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@using Microsoft.AspNetCore.SignalR.Client
 
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <p>test</p>
 </div>
+
+<div id="divNoti">
+</div>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.min.js"></script>
+
+<script>
+    // var connection = new signalR.HubConnectionBuilder().withUrl("/notiHub").build();
+    var connection = new signalR.HubConnectionBuilder().withUrl("https://localhost:7155/notiHub").build();
+
+    connection.start().then(function () {
+        console.log("Conexión exitosa");
+    }).catch(function (err) {
+        console.error(err);
+    });
+
+    connection.on("Receive", function (success, message) {
+        let divNewNoti = document.createElement("div");
+
+        divNewNoti.textContent = success + ", " + message;
+
+        document.getElementById("divNoti").appendChild(divNewNoti);
+    })
+     
+</script>
